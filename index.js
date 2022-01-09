@@ -1,7 +1,7 @@
 const express = require('express');
 const expressApp = express();
-const authRoute = require('./routes/auth');
 const mongoose = require('mongoose');
+const authRoute = require('./routes/auth');
 
 
 const port = 3000 || process.env.PORT;
@@ -13,6 +13,9 @@ mongoose.connect(mongo, { useNewUrlParser: true }, () => {
     console.log('Connected to DB')
 })
 
+
+// Middleware
+expressApp.use(express.json());
 
 expressApp.use('/api/user', authRoute);     // Route middleware
 
