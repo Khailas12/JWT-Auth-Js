@@ -1,51 +1,33 @@
 const router = require('express').Router();
 const User = require('../model/user');
-
-
-// User Validation
-const Joi = require('@hapi/joi');
-
-
-const JoiSchema = Joi.object({
-
-    firstName: Joi.string()
-        .min(3)
-        .max(100)
-        .required(),
-
-    lastName: Joi.string()
-        .min(3)
-        .max(100)
-        .required(),
-
-    email: Joi.string()
-        .email({ minDomainSegments: 2 })
-        .required(),
-
-    password: Joi.string()
-        .pattern(new RegExp('^[a-zA-Z0-9]{3,30}$'))
-        .min(6)
-        .max(100)
-        .required(),
-
-});
+const { registerValidation, loginValidation } = require('../validation');
 
 
 router.post('/register', async (req, res) => {
-
+    const options = {
+        abortEarly: false, // include all errors
+        allowUnknown: true, // ignore unknown props
+        stripUnknown: true // remove unknown props
+    };
+    
     // data validation
-    const { error } = JoiSchema.validate(req.body);
+    const { error, value } = registerValidation(req.body, options);
 
     if (error) {
         return res.status(400)
-        .send(error.details[0].message);
+            .send(error.details[0].message);
+    } else {
+        // on success replace req.body with validated value and trigger next middleware function
+        req.body = value;
     }
+
 
     const user = new User({
         firstName: req.body.firstName,
         lastName: req.body.lastName,
         email: req.body.email,
         password: req.body.password,
+        repeatPassword: req.body.password,
         date: req.body.date,
     });
 
@@ -54,7 +36,7 @@ router.post('/register', async (req, res) => {
         res.send(savedUser);
         console.log('User saved');
     }
-    catch(error) {
+    catch (error) {
         res.status(400).send(error);
         console.log('user errror');
     }
