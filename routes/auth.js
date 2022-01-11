@@ -93,8 +93,8 @@ router.post('/login', async (req, res) => {
             .send('Invalid Password')
     };
 
-    // const username =await User.findOne(User.firstName);
-    // res.send(`Login Succesful, Welcome ${username} `);
+    const username =await User.findOne(User.firstName);
+    res.send(`Login Succesful, Welcome ${username} `);
     console.log('User Logged in')
 });
 
