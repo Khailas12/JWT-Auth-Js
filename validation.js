@@ -1,5 +1,6 @@
 const Joi = require('joi');
 
+
 const registerValidation = ((user) => {
 
     const JoiSchema = Joi.object({
@@ -55,8 +56,6 @@ const loginValidation = ((user) => {
             .max(100)
             .required(),
 
-        repeatPassword: Joi.ref('password'),
-
         accessToken: [
             Joi.string(),
             Joi.number()
@@ -66,7 +65,6 @@ const loginValidation = ((user) => {
         .xor('password', 'accessToken')
         .with('password', 'repeatPassword');
     // schema options
-
 
     return JoiSchema.validate(user)
 });
