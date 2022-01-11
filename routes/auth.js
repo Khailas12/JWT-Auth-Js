@@ -41,9 +41,9 @@ router.post('/register', async (req, res) => {
         date: req.body.date,
     });
 
-    // checks user exists in the db already
+    // checks whether the user exists in the db
     const emailExist = await User.findOne({ email: req.body.email });
-    
+
     if (emailExist) {
         return res.status(400)
             .send('Email already Exists');
@@ -68,24 +68,30 @@ router.post('/register', async (req, res) => {
 
 router.post('/login', async (req, res) => {
 
-    const { errror, value } = loginValidation(req.body, options);
+    const { error, value } = loginValidation(req.body, options);
 
-    if (errror) {
+    if (error) {
         return res.status(400)
-            .send(errror.details[0].message);
+            .send(error.details[0].message);
     }
     else {
         req.body = value;
     }
 
-    const noEmailMatch = await User.findOne({ email: req.body.email });
+    const EmailMatch = await User.findOne({ email: req.body.email });
 
-    if (!noEmailMatch) {  // if no matching email
+    if (!EmailMatch) {  // if no matching email
         return res.status(400)
             .send('Email does not exist');
     }
 
-    const validPswd = bcrypt.compare()
+    const validPswd = bcrypt.compare(req.body.password, User.password);
+    if (!validPswd) {   // no matching pswd
+        return res.status(400)
+            .send('Invalid Password')
+    };
+
+    res.send('Login Succesful')
 });
 
 
