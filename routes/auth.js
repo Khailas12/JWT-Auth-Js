@@ -57,7 +57,7 @@ router.post('/register', async (req, res) => {
             user: user.firstName + ' ' + user.lastName,
             email: user.email,
         });
-        console.log('User saved');
+        console.log('User Created');
     }
     catch (error) {
         res.status(400).send(error);
@@ -85,19 +85,17 @@ router.post('/login', async (req, res) => {
             .send('Email does not exist');
     }
 
-    const myPlaintextPassword = 's0/\/\P4$$w0rD';
-    const someOtherPlaintextPassword = 'not_bacon';
-    const saltRounds = 10;
-    const hashPassword = bcrypt.hashSync(req.body.password, saltRounds);
-
-    const validPswd = bcrypt.compare(myPlaintextPassword, req.body.password, User.password);
+    const myPlaintextPassword = 's0/\/\P4$$w0rD';   
+    const validPswd = bcrypt.compare(myPlaintextPassword, req.body.password, User.password);    
 
     if (!validPswd) {   // no matching pswd
         return res.status(400)
             .send('Invalid Password')
     };
 
-    res.send('Login Succesful')
+    // const username =await User.findOne(User.firstName);
+    // res.send(`Login Succesful, Welcome ${username} `);
+    console.log('User Logged in')
 });
 
 
