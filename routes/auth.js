@@ -85,7 +85,13 @@ router.post('/login', async (req, res) => {
             .send('Email does not exist');
     }
 
-    const validPswd = bcrypt.compare(req.body.password, User.password);
+    const myPlaintextPassword = 's0/\/\P4$$w0rD';
+    const someOtherPlaintextPassword = 'not_bacon';
+    const saltRounds = 10;
+    const hashPassword = bcrypt.hashSync(req.body.password, saltRounds);
+
+    const validPswd = bcrypt.compare(myPlaintextPassword, req.body.password, User.password);
+
     if (!validPswd) {   // no matching pswd
         return res.status(400)
             .send('Invalid Password')

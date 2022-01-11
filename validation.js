@@ -63,7 +63,6 @@ const loginValidation = ((user) => {
 
     })
         .xor('password', 'accessToken')
-        .with('password', 'repeatPassword');
     // schema options
 
     return JoiSchema.validate(user)

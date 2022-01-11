@@ -9,9 +9,7 @@ const port = 3000 || process.env.PORT;
 // Mongo db connection
 require('dotenv').config()
 const mongo = process.env.MONGO;
-mongoose.connect(mongo, {
-    useNewUrlParser: true,
-})
+mongoose.connect(mongo, { useNewUrlParser: true })
     .then(() => {
         console.log('Connected to MongoDB');
     })
