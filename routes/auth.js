@@ -98,9 +98,9 @@ router.post('/login', async (req, res) => {
     dotenv.config();
     const secret_token = process.env.SECRET_TOKEN;
     const token = jwt.sign({ _id: User._id }, secret_token);
-    res.header(token).send(token);
+    res.header('auth-token', token).send(token);
 
-
+    
     // const username =await User.findOne(User.firstName);
     // res.send(`Login Succesful, Welcome ${username} `);
     console.log('User Logged in');
