@@ -64,7 +64,7 @@ const loginValidation = ((user) => {
     })
         .xor('password', 'accessToken')
     // schema options
-
+    
     return JoiSchema.validate(user)
 });
 
