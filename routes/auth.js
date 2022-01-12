@@ -1,5 +1,7 @@
 const router = require('express').Router();
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
 
 const User = require('../model/user');
 const { registerValidation, loginValidation } = require('../validation');
@@ -10,7 +12,6 @@ const options = {
     allowUnknown: true, // ignore unknown props
     stripUnknown: true // remove unknown props
 };
-
 
 router.post('/register', async (req, res) => {
 
@@ -93,9 +94,16 @@ router.post('/login', async (req, res) => {
             .send('Invalid Password')
     };
 
-    const username =await User.findOne(User.firstName);
-    res.send(`Login Succesful, Welcome ${username} `);
-    console.log('User Logged in')
+    // Create and assign a token
+    dotenv.config();
+    const secret_token = process.env.SECRET_TOKEN;
+    const token = jwt.sign({ _id: User._id }, secret_token);
+    res.header(token).send(token);
+
+
+    // const username =await User.findOne(User.firstName);
+    // res.send(`Login Succesful, Welcome ${username} `);
+    console.log('User Logged in');
 });
 
 
